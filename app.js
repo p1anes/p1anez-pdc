@@ -2,90 +2,126 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('loginForm');
     const userInfo = document.getElementById('user-info');
     const controllersList = document.getElementById('controllers-list');
+    const controllerBoxes = document.getElementById('controller-boxes');
+    const messageDisplay = document.getElementById('message-display');
     const messageInput = document.getElementById('message-input');
     const sendMessageButton = document.getElementById('send-message');
+    const errorMessage = document.getElementById('error-message');
 
-    // Handle form submission
-    loginForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // Prevent the form from submitting traditionally
-
-        const username = document.getElementById('username').value;
-        const role = document.getElementById('role').value;
-        const callsign = role === 'pilot' ? document.getElementById('callsign').value : '';
-
-        // Make an API call to log in
-        fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, role, callsign }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                localStorage.setItem('username', username);
-                localStorage.setItem('userRole', role);
-                localStorage.setItem('callsign', callsign);
-                userInfo.textContent = `Logged in as: ${username} (${role})`;
-                fetchControllers(); // Fetch controllers after logging in
-            } else {
-                // Handle login error
-                console.error(data.error);
-            }
-        })
-        .catch(error => console.error('Error logging in:', error));
+    // Event listener for the role selection
+    const roleSelect = document.getElementById('role');
+    roleSelect.addEventListener('change', (event) => {
+        const selectedRole = event.target.value;
+        if (selectedRole === 'pilot') {
+            document.getElementById('callsign').style.display = 'inline-block';
+            document.getElementById('extraInfo').style.display = 'none';
+        } else {
+            document.getElementById('callsign').style.display = 'none';
+            document.getElementById('extraInfo').style.display = 'inline-block';
+        }
     });
 
-    // Function to fetch connected controllers
-    function fetchControllers() {
-        fetch('/api/controllers')
-            .then(response => response.json())
-            .then(controllers => {
-                controllersList.innerHTML = ''; // Clear previous list
-                controllers.forEach(controller => {
-                    const controllerBox = document.createElement('div');
-                    controllerBox.classList.add('controller-box');
-                    controllerBox.textContent = controller.username; // Display username instead
-                    controllerBox.addEventListener('click', () => {
-                        localStorage.setItem('selectedController', controller.username);
-                        messageInput.value = `${controller.username}, request clearance to `;
-                    });
-                    controllersList.appendChild(controllerBox);
+    // Login form submission
+    loginForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const callsign = document.getElementById('callsign').value.trim();
+        const position = document.getElementById('extraInfo').value;
+
+        if (!username) {
+            errorMessage.textContent = 'Username must be filled out.';
+            return;
+        }
+
+        if (roleSelect.value === 'pilot' && !callsign) {
+            errorMessage.textContent = 'Callsign must be filled out.';
+            return;
+        }
+
+        if (roleSelect.value === 'controller' && position === '') {
+            errorMessage.textContent = 'Position must be selected.';
+            return;
+        }
+
+        // Store user info in localStorage
+        const userRole = roleSelect.value;
+        localStorage.setItem('userRole', userRole);
+        localStorage.setItem('username', username);
+        if (userRole === 'pilot') {
+            localStorage.setItem('callsign', callsign);
+        } else {
+            localStorage.setItem('position', position);
+        }
+
+        // Redirect to the messaging page (or update UI for messaging)
+        window.location.href = 'messaging.html'; // Replace with the actual messaging page URL
+    });
+
+    // Here, you will fetch the connected controllers from your server.
+    fetch('/api/controllers') // Adjust the API endpoint as necessary
+        .then(response => response.json())
+        .then(controllers => {
+            controllers.forEach(controller => {
+                const controllerBox = document.createElement('div');
+                controllerBox.classList.add('controller-box');
+                controllerBox.textContent = controller.name; // Use the actual controller name from the server
+                controllerBox.addEventListener('click', () => {
+                    // Set selected controller
+                    localStorage.setItem('selectedController', controller.name);
+                    messageInput.value = `${controller.name}, request clearance to `;
                 });
-            })
-            .catch(error => console.error('Error fetching controllers:', error));
-    }
+                controllerBoxes.appendChild(controllerBox);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching controllers:', error);
+        });
 
     // Sending message logic
     sendMessageButton.addEventListener('click', () => {
         const message = messageInput.value.trim();
-        const sender = localStorage.getItem('username');
-        const role = localStorage.getItem('userRole');
-        const recipient = localStorage.getItem('selectedController');
+        if (message) {
+            // Display the message
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${localStorage.getItem('username')} (${localStorage.getItem('userRole')}): ${message}`;
+            messageDisplay.appendChild(messageElement);
+            messageInput.value = ''; // Clear the input after sending
 
-        if (message && recipient) {
-            fetch('/api/sendMessage', {
+            // Send the message to the server
+            fetch('/api/sendMessage', { // Adjust the API endpoint as necessary
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ sender, role, message, recipient }),
+                body: JSON.stringify({
+                    sender: localStorage.getItem('username'),
+                    role: localStorage.getItem('userRole'),
+                    message: message,
+                    recipient: localStorage.getItem('selectedController'), // Optional, depending on your backend logic
+                }),
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
-                    const messageElement = document.createElement('div');
-                    messageElement.textContent = `${role} ${sender}: ${message}`;
-                    document.getElementById('message-display').appendChild(messageElement);
-                    messageInput.value = ''; // Clear the input after sending
-                } else {
-                    console.error(data.error);
-                }
+                console.log('Message sent successfully:', data);
             })
-            .catch(error => console.error('Error sending message:', error));
-        } else {
-            console.error('Message or recipient is missing.');
+            .catch(error => {
+                console.error('Error sending message:', error);
+            });
         }
+    });
+
+    // Preset message functionality
+    const presetButtons = document.querySelectorAll('.preset-button');
+    presetButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const type = button.getAttribute('data-type');
+            let presetMessage = '';
+            if (type === 'clearance') {
+                presetMessage = `${localStorage.getItem('selectedController')}, request clearance to `;
+            } else if (type === 'altitude') {
+                presetMessage = `${localStorage.getItem('selectedController')} request flight level/altitude change to `;
+            }
+            messageInput.value = presetMessage; // Set the message input to the preset message
+        });
     });
 });
