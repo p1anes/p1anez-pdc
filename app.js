@@ -6,18 +6,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageContainer = document.getElementById('messageContainer');
     const sendMessageButton = document.getElementById('sendMessageButton');
     const messageInput = document.getElementById('messageInput');
+  
+    const roleSelect = document.getElementById('role');
+    const extraInfoInput = document.getElementById('extraInfo');
     
     let role, username, extraInfo;
+  
+    // Show or hide the position dropdown based on role selection
+    roleSelect.addEventListener('change', () => {
+      if (roleSelect.value === 'controller') {
+        extraInfoInput.style.display = 'block';
+      } else {
+        extraInfoInput.style.display = 'none';
+      }
+    });
   
     // Handle login form submission
     loginForm.addEventListener('submit', (event) => {
       event.preventDefault();
   
-      role = document.getElementById('role').value;
+      role = roleSelect.value;
       username = document.getElementById('username').value;
-      extraInfo = document.getElementById('extraInfo').value;
+      extraInfo = extraInfoInput.value;
   
-      if (!username || !extraInfo) {
+      if (!username || (role === 'controller' && !extraInfo)) {
         alert("Please enter all required fields.");
         return;
       }
@@ -43,32 +55,24 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // Basic message handling (for demonstration)
     function initializeChat() {
-      // Placeholder messages (replace this with real-time updates later)
       const placeholderMessages = [
         { sender: "Controller1", text: "Qatari-7007, you're cleared for takeoff." },
         { sender: "Pilot Qatari-7007", text: "Requesting altitude change to FL320." }
       ];
   
-      // Display placeholder messages
       placeholderMessages.forEach(msg => {
         displayMessage(msg.sender, msg.text);
       });
     }
   
-    // Send message function
     function sendMessage() {
       const message = messageInput.value.trim();
       if (!message) return;
   
-      // Display the message in the chat
       displayMessage(username, message);
-      messageInput.value = '';  // Clear input field
-  
-      // Placeholder for sending the message (implement real-time functionality later)
-      console.log(`Sent message: ${message}`);
+      messageInput.value = '';
     }
   
-    // Display message in the chat container
     function displayMessage(sender, text) {
       const messageElement = document.createElement('div');
       messageElement.textContent = `${sender}: ${text}`;

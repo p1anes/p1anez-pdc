@@ -15,7 +15,7 @@ body {
   }
   
   .logo {
-    width: 100px;
+    width: 150px; /* Make the logo bigger */
     margin-bottom: 20px;
   }
   
@@ -28,6 +28,27 @@ body {
     margin: 10px 0;
     padding: 10px;
     font-size: 1em;
+  }
+  
+  .rounded-input {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 1em;
+  }
+  
+  .rounded-button {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .rounded-button:hover {
+    background-color: #45a049;
   }
   
   #messageContainer {

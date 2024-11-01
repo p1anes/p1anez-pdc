@@ -14,21 +14,51 @@
     <div id="loginSection">
       <form id="loginForm">
         <label for="role">Select Role:</label>
-        <select id="role" name="role">
+        <select id="role" name="role" class="rounded-input">
           <option value="pilot">Pilot</option>
           <option value="controller">Controller</option>
         </select>
-        <input type="text" id="username" placeholder="Enter Username">
-        <input type="text" id="extraInfo" placeholder="Enter Callsign or Position">
-        <button type="submit">Login</button>
+
+        <input type="text" id="username" placeholder="Enter Username" class="rounded-input">
+
+        <select id="extraInfo" class="rounded-input" style="display: none;">
+          <option value="">Select Position</option>
+          <option value="IRFD_GND">IRFD_GND</option>
+          <option value="IRFD_TWR/APP/CTR">IRFD_TWR/APP/CTR</option>
+          <option value="IMLR_TWR">IMLR_TWR</option>
+          <option value="IGAR_TWR">IGAR_TWR</option>
+          <option value="IBLT_TWR">IBLT_TWR</option>
+          <option value="ITRN_TWR">ITRN_TWR</option>
+          <option value="ISAU_GND">ISAU_GND</option>
+          <option value="ISAU_TWR/APP/CTR">ISAU_TWR/APP/CTR</option>
+          <option value="IGRV_GND">IGRV_GND</option>
+          <option value="IGRV_TWR/APP/CTR">IGRV_TWR/APP/CTR</option>
+          <option value="ITKO_GND">ITKO_GND</option>
+          <option value="ITKO_TWR/APP/CTR">ITKO_TWR/APP/CTR</option>
+          <option value="IDCS_TWR">IDCS_TWR</option>
+          <option value="IPPH_GND">IPPH_GND</option>
+          <option value="IPPH_TWR/APP/CTR">IPPH_TWR/APP/CTR</option>
+          <option value="ILKL_TWR">ILKL_TWR</option>
+          <option value="IBTH_TWR/APP/CTR">IBTH_TWR/APP/CTR</option>
+          <option value="ISKP_TWR/APP/CTR">ISKP_TWR/APP/CTR</option>
+          <option value="ISCM_TWR">ISCM_TWR</option>
+          <option value="IZOL_GND">IZOL_GND</option>
+          <option value="IZOL_TWR/APP/CTR">IZOL_TWR/APP/CTR</option>
+          <option value="ILAR_GND">ILAR_GND</option>
+          <option value="ILAR_TWR/APP/CTR">ILAR_TWR/APP/CTR</option>
+          <option value="IIAB_TWR">IIAB_TWR</option>
+          <option value="IPAP_TWR">IPAP_TWR</option>
+        </select>
+
+        <button type="submit" class="rounded-button">Login</button>
       </form>
     </div>
 
     <div id="chatSection" style="display: none;">
       <h2 id="welcomeMessage"></h2>
       <div id="messageContainer"></div>
-      <input type="text" id="messageInput" placeholder="Type your message">
-      <button id="sendMessageButton">Send</button>
+      <input type="text" id="messageInput" placeholder="Type your message" class="rounded-input">
+      <button id="sendMessageButton" class="rounded-button">Send</button>
     </div>
   </div>
 
