@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Sim Messaging</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Flight Sim Messaging Portal</h1>
+    <img src="public/logo.png" alt="Site Logo" class="logo">
+
+    <div id="loginSection">
+      <form id="loginForm">
+        <label for="role">Select Role:</label>
+        <select id="role" name="role">
+          <option value="pilot">Pilot</option>
+          <option value="controller">Controller</option>
+        </select>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="text" id="extraInfo" placeholder="Enter Callsign or Position">
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div id="chatSection" style="display: none;">
+      <h2 id="welcomeMessage"></h2>
+      <div id="messageContainer"></div>
+      <input type="text" id="messageInput" placeholder="Type your message">
+      <button id="sendMessageButton">Send</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
