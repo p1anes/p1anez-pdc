@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: black; /* Set background to black */
     margin: 0;
     padding: 20px;
     display: flex;
@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-    background: white;
+    background: white; /* Keep login box white */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -19,7 +19,7 @@ body {
 }
 
 .logo {
-    width: 250px; /* Increase logo size */
+    width: 250px; /* Adjust logo size as needed */
     margin-bottom: 20px;
 }
 
@@ -35,6 +35,7 @@ h1 {
     margin-bottom: 10px;
     width: 100%;
     max-width: 300px; /* Uniform size for all inputs */
+    box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
 .rounded-button {

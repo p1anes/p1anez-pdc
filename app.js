@@ -4,16 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const extraInfoInput = document.getElementById('extraInfo');
     const loginForm = document.getElementById('loginForm');
 
+    // Callsign field always shown for pilots
+    callsignInput.style.display = 'block';
+
     // Show or hide fields based on role selection
     roleSelect.addEventListener('change', () => {
         if (roleSelect.value === 'pilot') {
-            callsignInput.style.display = 'block';
-            extraInfoInput.style.display = 'none';
+            extraInfoInput.style.display = 'none'; // Hide position dropdown for pilots
         } else if (roleSelect.value === 'controller') {
-            callsignInput.style.display = 'none';
-            extraInfoInput.style.display = 'block';
+            extraInfoInput.style.display = 'block'; // Show position dropdown for controllers
         } else {
-            callsignInput.style.display = 'none';
             extraInfoInput.style.display = 'none';
         }
     });
