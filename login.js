@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const userData = { username, role, callsign: role === 'pilot' ? callsign : '', position: role === 'controller' ? position : '' };
 
         // Send login data to server
-        const socket = io(); // Make sure you have the socket.io client set up
+        const socket = io('http://localhost:3000'); // Make sure you have the socket.io client set up
         socket.emit('login', userData);
 
         // Store user info in localStorage for the messaging page

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     userInfo.textContent = `Logged in as: ${username} (${userRole})`;
 
     // Connect to the Socket.IO server
-    const socket = io(); // Ensure you connect to the server
+    const socket = io('http://localhost:3000'); // Ensure you connect to the server
 
     // Listen for user list updates from the server
     socket.on('userList', (users) => {
