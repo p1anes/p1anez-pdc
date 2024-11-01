@@ -3,38 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messaging - p1anez PDC</title>
-    <link rel="stylesheet" href="style.css">
+    <title>PDC - Flight Simulator Messaging</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 </head>
 <body>
+    <header>
+        <h1>PDC</h1>
+        <div id="user-info"></div> <!-- Display logged-in user info -->
+    </header>
+    
     <div class="container">
-        <h1>Messaging</h1>
-        <div id="user-info"></div> <!-- To display user information -->
-
-        <div id="controllers-list" class="user-list">
-            <h2>Available Controllers</h2>
-            <div id="controller-boxes"></div> <!-- Controllers will be displayed here -->
+        <div id="controllers-list" class="available-controllers">
+            <h2 style="color: black;">Available Controllers</h2>
+            <div id="controller-boxes"></div> <!-- Controller boxes will be populated here -->
         </div>
 
-        <div id="message-area">
-            <h2>Messages</h2>
-            <div id="message-display" class="message-display"></div> <!-- Display messages here -->
-
-            <div class="input-group">
-                <textarea id="message-input" placeholder="Type your message..." class="rounded-input"></textarea>
-            </div>
-
-            <div class="input-group">
-                <button id="send-message" class="rounded-button">Send</button>
-            </div>
+        <div id="message-display">
+            <h2 style="color: black;">RCVD MSGS</h2>
+            <!-- Messages will be displayed here -->
         </div>
 
-        <div id="preset-messages">
-            <h2>Preset Messages</h2>
-            <button class="preset-button" data-type="clearance">Request Clearance</button>
-            <button class="preset-button" data-type="altitude">Request Flight Level/Altitude Change</button>
+        <div class="message-input">
+            <input type="text" id="message-input" placeholder="Type your message here">
+            <button id="send-message">Send</button>
         </div>
     </div>
-    <script src="messaging.js"></script>
+
+    <script src="messaging.js"></script> <!-- Link to your JavaScript file -->
 </body>
 </html>
