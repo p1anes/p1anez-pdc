@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     userInfo.textContent = `Logged in as: ${username} (${userRole})`;
 
-    // Fetch connected controllers from the server (you may adjust the endpoint)
+    // Fetch connected controllers from the server
     fetch('/active-users')
         .then(response => response.json())
         .then(data => {
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             data.controllers.forEach(controller => {
                 const controllerBox = document.createElement('div');
                 controllerBox.classList.add('controller-box');
-                controllerBox.textContent = controller.callsign;
+                controllerBox.textContent = `${controller.username} (${controller.callsign})`;
                 controllerBox.addEventListener('click', () => {
                     // Set selected controller
                     localStorage.setItem('selectedController', controller.callsign);
@@ -29,20 +29,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 controllerBoxes.appendChild(controllerBox);
             });
-        });
+        })
+        .catch(error => console.error('Error fetching controllers:', error));
 
     // Sending message logic
     sendMessageButton.addEventListener('click', () => {
         const message = messageInput.value.trim();
         if (message) {
-            // Send message to server
+            // Send message to the selected controller
+            const selectedController = localStorage.getItem('selectedController');
             fetch('/send-message', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    username,
-                    userRole,
+                    sender: username,
                     message,
+                    recipient: selectedController, // Send to selected controller
                 }),
             })
             .then(response => response.json())
@@ -52,7 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 messageElement.textContent = `${username} (${userRole}): ${message}`;
                 messageDisplay.appendChild(messageElement);
                 messageInput.value = ''; // Clear the input after sending
-            });
+            })
+            .catch(error => console.error('Error sending message:', error));
         }
     });
 
