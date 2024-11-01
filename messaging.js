@@ -1,47 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const userInfo = document.getElementById('user-info');
-    const controllerBoxes = document.getElementById('controller-boxes');
-    const sendMessageButton = document.getElementById('send-message');
-    const messageInput = document.getElementById('message-input');
+const socket = io();
 
-    // Retrieve user information from local storage
+// Handle user login on the messaging page
+socket.on('connect', () => {
     const username = localStorage.getItem('username');
     const userRole = localStorage.getItem('userRole');
+    const callsign = localStorage.getItem('callsign');
+    const position = localStorage.getItem('position');
 
-    // Display user info on the page
-    userInfo.textContent = `Logged in as: ${username} (${userRole})`;
-
-    // Connect to the Socket.IO server
-    const socket = io(); // Ensure this connects to the server
-
-    // Emit a login event with user data
-    socket.emit('login', {
+    const userData = {
+        id: socket.id,
         username,
-        role: userRole,
-        callsign: localStorage.getItem('callsign'), // Assuming callsign is stored in localStorage
-        position: localStorage.getItem('position') // Assuming position is stored in localStorage
-    });
+        callsign: userRole === 'pilot' ? callsign : '',
+        position: userRole === 'controller' ? position : ''
+    };
 
-    // Listen for user list updates from the server
-    socket.on('userList', (users) => {
-        controllerBoxes.innerHTML = ''; // Clear existing boxes
-        users.forEach(user => {
-            if (user.role === 'controller') { // Only show controllers
-                const box = document.createElement('div');
-                box.className = 'controller-box';
-                box.textContent = `${user.username} (${user.callsign})`;
-                controllerBoxes.appendChild(box);
-            }
-        });
-    });
+    // Emit user login data to the server
+    socket.emit('userLoggedIn', userData);
+});
 
-    // Send a message when the send button is clicked
-    sendMessageButton.addEventListener('click', () => {
-        const message = messageInput.value;
-        if (message) {
-            // Emit the message to the server (you might want to add a specific event for this)
-            socket.emit('message', { from: username, content: message });
-            messageInput.value = ''; // Clear the input after sending
+// Update the user list on the webpage
+socket.on('updateUserList', (users) => {
+    const availableControllers = document.getElementById('availableControllers');
+    availableControllers.innerHTML = ''; // Clear existing list
+
+    users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = `${user.username} (${user.callsign})`;
+        if (user.position) {
+            li.textContent += ` - ${user.position}`;
         }
+        availableControllers.appendChild(li);
     });
 });

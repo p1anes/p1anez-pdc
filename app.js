@@ -1,3 +1,5 @@
+const socket = io(); // Ensure this connects to your Socket.IO server
+
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('error-message');
@@ -6,13 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const roleSelect = document.getElementById('role');
     roleSelect.addEventListener('change', (event) => {
         const selectedRole = event.target.value;
-        if (selectedRole === 'pilot') {
-            document.getElementById('callsign').style.display = 'inline-block';
-            document.getElementById('extraInfo').style.display = 'none';
-        } else {
-            document.getElementById('callsign').style.display = 'none';
-            document.getElementById('extraInfo').style.display = 'inline-block';
-        }
+        document.getElementById('callsign').style.display = selectedRole === 'pilot' ? 'inline-block' : 'none';
+        document.getElementById('extraInfo').style.display = selectedRole === 'controller' ? 'inline-block' : 'none';
     });
 
     // Login form submission
@@ -22,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const callsign = document.getElementById('callsign').value.trim();
         const position = document.getElementById('extraInfo').value;
 
+        // Validation
         if (!username) {
             errorMessage.textContent = 'Username must be filled out.';
             return;
@@ -37,17 +35,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Store user info in localStorage
-        const userRole = roleSelect.value;
-        localStorage.setItem('userRole', userRole);
+        // Create user data object
+        const userData = { username, role: roleSelect.value, callsign, position };
+
+        // Emit login data to the server
+        socket.emit('userLoggedIn', userData);
+
+        // Store user info in localStorage for the messaging page
         localStorage.setItem('username', username);
-        if (userRole === 'pilot') {
-            localStorage.setItem('callsign', callsign);
-        } else {
+        localStorage.setItem('userRole', roleSelect.value);
+        localStorage.setItem('callsign', callsign);
+        if (roleSelect.value === 'controller') {
             localStorage.setItem('position', position);
         }
 
-        // Redirect to the messaging page (or update UI for messaging)
-        window.location.href = 'messaging.html'; // Replace with the actual messaging page URL
+        // Redirect to messaging page
+        window.location.href = 'messaging.html';
     });
 });
