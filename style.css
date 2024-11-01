@@ -1,54 +1,60 @@
 body {
+    background-color: black; /* Set background color to black */
+    color: white;
     font-family: Arial, sans-serif;
-    background-color: black; /* Set background to black */
-    margin: 0;
-    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    flex-direction: column;
+    margin: 0;
 }
 
 .container {
-    background: white; /* Keep login box white */
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .logo {
-    width: 250px; /* Adjust logo size as needed */
-    margin-bottom: 20px;
-}
-
-h1 {
-    font-size: 24px;
+    width: 200px; /* Adjust size as needed */
     margin-bottom: 20px;
 }
 
 .rounded-input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    margin: 10px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    width: 100%;
-    max-width: 300px; /* Uniform size for all inputs */
-    box-sizing: border-box; /* Ensure padding is included in the width */
+    background-color: #333;
+    color: white;
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between inputs */
 }
 
 .rounded-button {
-    background-color: #4CAF50;
+    background-color: #007bff;
     color: white;
+    padding: 10px 15px;
     border: none;
     border-radius: 5px;
-    padding: 10px 15px;
     cursor: pointer;
-    width: 100%; /* Button same size as inputs */
-    max-width: 300px;
+    transition: background-color 0.3s;
 }
 
 .rounded-button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 10px;
 }
