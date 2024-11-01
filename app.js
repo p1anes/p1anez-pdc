@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const roleSelect = document.getElementById('role');
     const callsignInput = document.getElementById('callsign');
     const extraInfoInput = document.getElementById('extraInfo');
+    const loginForm = document.getElementById('loginForm');
 
     // Show or hide fields based on role selection
     roleSelect.addEventListener('change', () => {
@@ -15,5 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
             callsignInput.style.display = 'none';
             extraInfoInput.style.display = 'none';
         }
+    });
+
+    // Handle login form submission
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent the default form submission
+        window.location.href = 'messaging.html'; // Redirect to messaging page
     });
 });
