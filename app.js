@@ -2,21 +2,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const roleSelect = document.getElementById('role');
     const usernameInput = document.getElementById('username');
     const callsignInput = document.getElementById('callsign');
-    const controllerUsernameInput = document.getElementById('controllerUsername');
     const extraInfoInput = document.getElementById('extraInfo');
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('error-message');
 
-    // Show or hide fields based on role selection
+    // Handle role selection
     roleSelect.addEventListener('change', () => {
         if (roleSelect.value === 'pilot') {
-            callsignInput.style.display = 'block'; // Show callsign input for pilots
-            controllerUsernameInput.closest('.input-group').style.display = 'none'; // Hide controller username input
-            extraInfoInput.closest('.input-group').style.display = 'none'; // Hide position dropdown for pilots
+            callsignInput.style.display = 'block'; // Show callsign input
+            extraInfoInput.style.display = 'none'; // Hide position dropdown
         } else if (roleSelect.value === 'controller') {
-            callsignInput.style.display = 'none'; // Hide callsign input for controllers
-            controllerUsernameInput.closest('.input-group').style.display = 'block'; // Show controller username input
-            extraInfoInput.closest('.input-group').style.display = 'block'; // Show position dropdown for controllers
+            callsignInput.style.display = 'none'; // Hide callsign input
+            extraInfoInput.style.display = 'block'; // Show position dropdown
         }
     });
 
@@ -25,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault(); // Prevent the default form submission
         const username = usernameInput.value.trim();
         const callsign = callsignInput.value.trim();
-        const controllerUsername = controllerUsernameInput.value.trim();
         const position = extraInfoInput.value;
 
         // Validate inputs
@@ -35,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
         } else {
-            if (!controllerUsername || !position) {
+            if (!username || !position) {
                 errorMessage.textContent = "You must fill out all fields.";
                 return;
             }

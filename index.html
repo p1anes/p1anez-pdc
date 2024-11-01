@@ -22,15 +22,11 @@
 
             <div class="input-group">
                 <input type="text" id="username" placeholder="Enter Username" class="rounded-input">
-                <input type="text" id="callsign" placeholder="Enter Callsign" class="rounded-input"> <!-- Callsign input is visible by default -->
             </div>
 
-            <div class="input-group" style="display: none;">
-                <input type="text" id="controllerUsername" placeholder="Enter Username" class="rounded-input"> <!-- Only one username input for controller -->
-            </div>
-
-            <div class="input-group" style="display: none;">
-                <select id="extraInfo" class="rounded-input">
+            <div class="input-group">
+                <input type="text" id="callsign" placeholder="Enter Callsign" class="rounded-input"> <!-- Callsign input for pilots -->
+                <select id="extraInfo" class="rounded-input" style="display: none;"> <!-- Dropdown for controllers -->
                     <option value="">Select Position</option>
                     <option value="IRFD_GND">IRFD_GND</option>
                     <option value="IRFD_TWR/APP/CTR">IRFD_TWR/APP/CTR</option>
