@@ -10,18 +10,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Display user info
     userInfo.textContent = `Logged in as: ${username} (${userRole})`;
 
-    // Fetch available controllers
-    fetch('/api/controllers') // Adjust your endpoint accordingly
-        .then(response => response.json())
-        .then(data => {
-            const controllerBoxes = document.getElementById('controller-boxes');
-            data.forEach(controller => {
+    // Connect to the Socket.IO server
+    const socket = io(); // Ensure you connect to the server
+
+    // Listen for user list updates from the server
+    socket.on('userList', (users) => {
+        const controllerBoxes = document.getElementById('controller-boxes');
+        controllerBoxes.innerHTML = ''; // Clear existing boxes
+        users.forEach(user => {
+            if (user.role === 'controller') { // Only show controllers
                 const box = document.createElement('div');
                 box.className = 'controller-box';
-                box.textContent = `${controller.username} (${controller.callsign})`;
+                box.textContent = `${user.username} (${user.callsign})`;
                 controllerBoxes.appendChild(box);
-            });
+            }
         });
+    });
 
     // Message sending functionality
     sendMessageButton.addEventListener('click', () => {
