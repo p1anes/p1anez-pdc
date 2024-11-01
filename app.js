@@ -6,18 +6,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Event listener for the role selection
     const roleSelect = document.getElementById('role');
+    const callsignInput = document.getElementById('callsign');
+    const extraInfoInput = document.getElementById('extraInfo');
+
     roleSelect.addEventListener('change', (event) => {
         const selectedRole = event.target.value;
-        document.getElementById('callsign').style.display = selectedRole === 'pilot' ? 'inline-block' : 'none';
-        document.getElementById('extraInfo').style.display = selectedRole === 'controller' ? 'inline-block' : 'none';
+        callsignInput.style.display = selectedRole === 'pilot' ? 'inline-block' : 'none';
+        extraInfoInput.style.display = selectedRole === 'controller' ? 'inline-block' : 'none';
     });
 
     // Login form submission
     loginForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const username = document.getElementById('username').value.trim();
-        const callsign = document.getElementById('callsign').value.trim();
-        const position = document.getElementById('extraInfo').value;
+        const callsign = callsignInput.value.trim();
+        const position = extraInfoInput.value;
 
         // Validation
         if (!username) {
@@ -30,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (roleSelect.value === 'controller' && position === '') {
+        if (roleSelect.value === 'controller' && !position) {
             errorMessage.textContent = 'Position must be selected.';
             return;
         }
@@ -44,8 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Store user info in localStorage for the messaging page
         localStorage.setItem('username', username);
         localStorage.setItem('userRole', roleSelect.value);
-        localStorage.setItem('callsign', callsign);
-        if (roleSelect.value === 'controller') {
+        if (roleSelect.value === 'pilot') {
+            localStorage.setItem('callsign', callsign);
+        } else {
             localStorage.setItem('position', position);
         }
 
