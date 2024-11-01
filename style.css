@@ -1,60 +1,51 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f5f5f5;
-    margin: 0;
-  }
-  
-  .container {
+    flex-direction: column;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .logo {
+}
+
+.logo {
     width: 250px; /* Increase logo size */
     margin-bottom: 20px;
-  }
-  
-  #loginForm, #chatSection {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  input, select, button {
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 1em;
-  }
-  
-  .rounded-input {
-    border-radius: 8px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.rounded-input {
+    border-radius: 5px;
     border: 1px solid #ccc;
     padding: 10px;
-    font-size: 1em;
-  }
-  
-  .rounded-button {
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 1em;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.rounded-button {
     background-color: #4CAF50;
     color: white;
     border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
     cursor: pointer;
-  }
-  
-  .rounded-button:hover {
+}
+
+.rounded-button:hover {
     background-color: #45a049;
-  }
-  
-  #messageContainer {
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 200px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
-  }
+}
