@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="public/logo.png" alt="Logo" class="logo"> 
+        <img src="public/logo.png" alt="Logo" class="logo"> <!-- Replace logo.png with your logo filename -->
         <h1>p1anez PDC</h1>
         
         <form id="loginForm">
@@ -22,11 +22,14 @@
 
             <div class="input-group">
                 <input type="text" id="username" placeholder="Enter Username" class="rounded-input">
-                <input type="text" id="callsign" placeholder="Enter Callsign" class="rounded-input"> 
+                <input type="text" id="callsign" placeholder="Enter Callsign" class="rounded-input"> <!-- Callsign input is visible by default -->
             </div>
 
             <div class="input-group" style="display: none;">
-                <input type="text" id="controllerUsername" placeholder="Enter Username" class="rounded-input"> 
+                <input type="text" id="controllerUsername" placeholder="Enter Username" class="rounded-input"> <!-- Only one username input for controller -->
+            </div>
+
+            <div class="input-group" style="display: none;">
                 <select id="extraInfo" class="rounded-input">
                     <option value="">Select Position</option>
                     <option value="IRFD_GND">IRFD_GND</option>
