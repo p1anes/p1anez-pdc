@@ -18,10 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             // Create boxes for each controller
-            data.controllers.forEach(controller => {
+            data.forEach(controller => {
                 const controllerBox = document.createElement('div');
                 controllerBox.classList.add('controller-box');
-                controllerBox.textContent = `${controller.username} (${controller.callsign})`;
+                controllerBox.textContent = `${controller.callsign} (${controller.username})`;
                 controllerBox.addEventListener('click', () => {
                     // Set selected controller
                     localStorage.setItem('selectedController', controller.callsign);
@@ -29,33 +29,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 controllerBoxes.appendChild(controllerBox);
             });
-        })
-        .catch(error => console.error('Error fetching controllers:', error));
+        });
 
     // Sending message logic
     sendMessageButton.addEventListener('click', () => {
         const message = messageInput.value.trim();
-        if (message) {
-            // Send message to the selected controller
-            const selectedController = localStorage.getItem('selectedController');
-            fetch('/send-message', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    sender: username,
-                    message,
-                    recipient: selectedController, // Send to selected controller
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Display the message received
-                const messageElement = document.createElement('div');
-                messageElement.textContent = `${username} (${userRole}): ${message}`;
-                messageDisplay.appendChild(messageElement);
-                messageInput.value = ''; // Clear the input after sending
-            })
-            .catch(error => console.error('Error sending message:', error));
+        const selectedController = localStorage.getItem('selectedController');
+        if (message && selectedController) {
+            // Send message to server
+            socket.emit('sendMessage', {
+                sender: `${username} (${userRole})`,
+                message,
+                recipient: selectedController,
+            });
+            
+            // Display the message locally as well
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${username} (${userRole}): ${message}`;
+            messageDisplay.appendChild(messageElement);
+            messageInput.value = ''; // Clear the input after sending
         }
     });
 
