@@ -3,14 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messaging Page</title>
+    <title>Messaging - p1anez PDC</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>PDC Page</h1>
-        <p>Welcome to the PDC System!</p>
-        <button onclick="window.location.href='index.html'" class="rounded-button">Back to Login</button>
+        <h1>Messaging</h1>
+        <div id="user-info"></div> <!-- To display user information -->
+
+        <div id="controllers-list" class="user-list">
+            <h2>Available Controllers</h2>
+            <div id="controller-boxes"></div> <!-- Controllers will be displayed here -->
+        </div>
+
+        <div id="message-area">
+            <h2>Messages</h2>
+            <div id="message-display" class="message-display"></div> <!-- Display messages here -->
+
+            <div class="input-group">
+                <textarea id="message-input" placeholder="Type your message..." class="rounded-input"></textarea>
+            </div>
+
+            <div class="input-group">
+                <button id="send-message" class="rounded-button">Send</button>
+            </div>
+        </div>
+
+        <div id="preset-messages">
+            <h2>Preset Messages</h2>
+            <button class="preset-button" data-type="clearance">Request Clearance</button>
+            <button class="preset-button" data-type="altitude">Request Flight Level/Altitude Change</button>
+        </div>
     </div>
+    <script src="messaging.js"></script>
 </body>
 </html>
