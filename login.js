@@ -1,16 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const loginButton = document.getElementById('login-button'); // Adjust the button ID as necessary
-    const usernameInput = document.getElementById('username'); // Username input field
-    const roleSelect = document.getElementById('role'); // Role dropdown
-    const callsignInput = document.getElementById('callsign'); // Callsign input field for pilots
-    const positionInput = document.getElementById('position'); // Position input field for controllers
+    const loginButton = document.getElementById('login-button');
+    const usernameInput = document.getElementById('username');
+    const roleSelect = document.getElementById('role');
+    const callsignInput = document.getElementById('callsign');
+    const positionInput = document.getElementById('extraInfo'); // Updated to match your HTML ID for controllers
+
+    const socket = io('http://localhost:3000'); // Ensure correct connection URL to your server
 
     // Function to handle login
     const handleLogin = () => {
         const username = usernameInput.value.trim();
-        const role = roleSelect.value; // 'pilot' or 'controller'
+        const role = roleSelect.value;
         const callsign = callsignInput.value.trim();
-        const position = positionInput.value.trim(); // Get the position input for controllers
+        const position = positionInput.value; 
 
         // Validate input
         if (!username || (role === 'pilot' && !callsign) || (role === 'controller' && !position)) {
@@ -21,8 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Create user data object
         const userData = { username, role, callsign: role === 'pilot' ? callsign : '', position: role === 'controller' ? position : '' };
 
-        // Send login data to server
-        const socket = io('http://localhost:3000'); // Make sure you have the socket.io client set up
+        // Emit login data to server
         socket.emit('login', userData);
 
         // Store user info in localStorage for the messaging page
@@ -30,10 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem('userRole', role);
         localStorage.setItem('callsign', callsign);
         if (role === 'controller') {
-            localStorage.setItem('position', position); // Store position if user is a controller
+            localStorage.setItem('position', position);
         }
 
-        // Redirect to messaging page after successful login
+        // Redirect to messaging page
         window.location.href = 'messaging.html';
     };
 
