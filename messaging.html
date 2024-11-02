@@ -4,33 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>p1anez PDC</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="styling.css">
 </head>
 <body>
     <header>
         <h1>PDC</h1>
-        <div id="user-info"></div> <!-- Display logged-in user info -->
+        <div id="user-info"></div>
     </header>
     
     <div class="container">
         <div id="controllers-list" class="available-controllers">
-            <h2 style="color: black;">Available Controllers</h2>
-            <div id="controller-boxes"></div> <!-- Controller boxes will be populated here -->
+            <h2 style="color: black;">Available Users</h2>
+            <div id="availableControllers"></div> <!-- User boxes will be populated here -->
         </div>
 
         <div id="message-display">
             <h2 style="color: black;">RCVD MSGS</h2>
-            <!-- Messages will be displayed here -->
+            <div id="receivedMessages"></div> <!-- Received messages will appear here -->
         </div>
 
         <div class="message-input">
             <input type="text" id="message-input" placeholder="Type your message here">
             <button id="send-message">Send</button>
-        </div>
-
-        <div id="controllers">
-            <h2>Available Controllers</h2>
-            <ul id="availableControllers"></ul>
         </div>
     </div>
 
