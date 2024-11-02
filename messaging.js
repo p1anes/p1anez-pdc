@@ -62,7 +62,7 @@ socket.on('receiveMessage', (data) => {
 
     const senderInfo = document.createElement('div');
     senderInfo.classList.add('sender-info');
-    senderInfo.textContent = `From: ${data.from} (${data.role})`; // Updated field names to match server response
+    senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`; // Updated field names to match server response
 
     const messageContent = document.createElement('p');
     messageContent.textContent = data.message;
