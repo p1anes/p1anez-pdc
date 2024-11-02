@@ -62,7 +62,7 @@ socket.on('receiveMessage', (data) => {
 
     const senderInfo = document.createElement('div');
     senderInfo.classList.add('sender-info');
-    senderInfo.textContent = `From: ${data.from} (${data.role})`;
+    senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`;
 
     const messageContent = document.createElement('p');
     messageContent.textContent = data.message;
