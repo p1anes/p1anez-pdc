@@ -22,7 +22,7 @@ socket.on('connect', () => {
 
 // Update the user list on the webpage
 socket.on('updateUserList', (users) => {
-    const availableUsers = document.getElementById('availableUsers');
+    const availableUsers = document.getElementById('available-users'); // Updated ID to match HTML
     availableUsers.innerHTML = ''; // Clear existing list
 
     users.forEach(user => {
@@ -56,13 +56,13 @@ document.getElementById('send-message').addEventListener('click', () => {
 
 // Display received messages with sender info
 socket.on('receiveMessage', (data) => {
-    const receivedMessages = document.getElementById('receivedMessages');
+    const receivedMessages = document.getElementById('received-messages'); // Updated ID to match HTML
     const messageBox = document.createElement('div');
     messageBox.classList.add('message-box');
 
     const senderInfo = document.createElement('div');
     senderInfo.classList.add('sender-info');
-    senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`;
+    senderInfo.textContent = `From: ${data.from} (${data.role})`; // Updated field names to match server response
 
     const messageContent = document.createElement('p');
     messageContent.textContent = data.message;
