@@ -1,6 +1,11 @@
 const socket = io();
 let selectedPilotId = null;
 
+socket.emit('registerUser', {
+    callsign: localStorage.getItem('callsign'), 
+    position: 'controller'
+});
+
 // Fetch available pilots
 socket.emit('requestPilots');
 

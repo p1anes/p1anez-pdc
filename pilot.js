@@ -1,6 +1,11 @@
 const socket = io();
 let selectedControllerId = null;
 
+socket.emit('registerUser' , {
+    callsign: localStorage.getItem('callsign'),
+    position: 'pilot'
+});
+
 // Fetch available controllers
 socket.emit('requestControllers');
 
