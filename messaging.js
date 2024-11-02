@@ -22,8 +22,8 @@ socket.on('connect', () => {
 
 // Update the user list on the webpage
 socket.on('updateUserList', (users) => {
-    const availableControllers = document.getElementById('availableControllers');
-    availableControllers.innerHTML = ''; // Clear existing list
+    const availableUsers = document.getElementById('availableUsers');
+    availableUsers.innerHTML = ''; // Clear existing list
 
     users.forEach(user => {
         const userBox = document.createElement('div');
@@ -32,12 +32,14 @@ socket.on('updateUserList', (users) => {
         userBox.textContent = `${user.username} (${user.role === 'controller' ? user.position : user.callsign}) - ${user.role}`;
 
         userBox.addEventListener('click', () => {
+            // Remove 'selected' styling from other boxes
             document.querySelectorAll('.user-box').forEach(box => box.classList.remove('selected-user'));
+            // Apply 'selected' styling to the clicked box
             userBox.classList.add('selected-user');
             selectedUserId = user.id;
         });
 
-        availableControllers.appendChild(userBox);
+        availableUsers.appendChild(userBox);
     });
 });
 
@@ -45,7 +47,7 @@ socket.on('updateUserList', (users) => {
 document.getElementById('send-message').addEventListener('click', () => {
     const message = document.getElementById('message-input').value.trim();
     if (message && selectedUserId) {
-        socket.emit('sendMessage', { to: selectedUserId, message });
+        socket.emit('privateMessage', { recipientId: selectedUserId, message });
         document.getElementById('message-input').value = ''; // Clear input
     } else {
         alert('Select a user to message and type a message');
@@ -60,7 +62,7 @@ socket.on('receiveMessage', (data) => {
 
     const senderInfo = document.createElement('div');
     senderInfo.classList.add('sender-info');
-    senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`;
+    senderInfo.textContent = `From: ${data.from} (${data.role})`;
 
     const messageContent = document.createElement('p');
     messageContent.textContent = data.message;

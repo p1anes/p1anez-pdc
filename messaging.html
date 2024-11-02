@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>p1anez PDC</title>
-    <link rel="stylesheet" href="styling.css">
+    <title>PDC Messaging</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your updated CSS file -->
 </head>
 <body>
     <header>
-        <h1>PDC</h1>
-        <div id="user-info"></div>
+        <h1>PDC Messaging</h1>
+        <div id="user-info"></div> <!-- Display logged-in user info -->
     </header>
     
     <div class="container">
-        <div id="controllers-list" class="available-controllers">
-            <h2 style="color: black;">Available Users</h2>
-            <div id="availableControllers"></div> <!-- User boxes will be populated here -->
+        <div id="available-users" class="available-users">
+            <h2>Available Users</h2>
+            <div id="user-boxes"></div> <!-- User boxes will be populated here -->
         </div>
 
         <div id="message-display">
-            <h2 style="color: black;">RCVD MSGS</h2>
-            <div id="receivedMessages"></div> <!-- Received messages will appear here -->
+            <h2>Received Messages</h2>
+            <div id="received-messages"></div> <!-- Messages displayed here -->
         </div>
 
         <div class="message-input">

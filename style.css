@@ -16,7 +16,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
+h1, h2 {
     text-align: center;
     color: black;
 }
@@ -68,8 +68,8 @@ button:hover {
     text-align: center;
 }
 
-/* User list */
-#availableControllers {
+/* User list styling */
+#availableUsers {
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -107,6 +107,7 @@ button:hover {
     background-color: #f1f1f1;
     color: black;
     border-radius: 5px;
+    font-size: 15px;
 }
 
 .sender-info {
