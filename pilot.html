@@ -7,27 +7,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>Pilot Interface</h1>
-        <div id="user-info"></div>
-        <div id="available-controllers">
+        <div id="user-info"></div> <!-- Display logged-in user info -->
+    </header>
+    
+    <div class="container">
+        <div id="available-users" class="available-users">
             <h2>Available Controllers</h2>
-            <!-- Controllers will be populated here -->
+            <div id="controller-boxes"></div> <!-- User boxes will be populated here -->
         </div>
-        <div id="message-log">
-            <h2>Message Log</h2>
-            <!-- Messages will be logged here -->
+
+        <div class="message-input">
+            <button id="request-ifr-clearance">Request IFR Clearance</button>
+            <button id="request-taxi">Request Taxi</button>
+            <button id="request-fl-change">Request FL Change</button>
         </div>
-        <input type="text" id="message-input" placeholder="Type your message here..." />
-        <button id="send-message">Send</button>
-        
-        <div class="premade-messages">
-            <h3>Premade Messages</h3>
-            <button class="premade-button" data-message="Request IFR Clearance">Request IFR Clearance</button>
-            <button class="premade-button" data-message="Request Taxi">Request Taxi</button>
-            <button class="premade-button" data-message="Request FL Change">Request FL Change</button>
+
+        <div id="message-display">
+            <h2>Messages</h2>
+            <div id="message-output"></div> <!-- Display messages here -->
         </div>
     </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="pilot.js"></script>
 </body>

@@ -1,71 +1,62 @@
 const socket = io();
 let selectedControllerId = null;
 
-// Display logged-in user info
-document.addEventListener("DOMContentLoaded", () => {
-    const username = localStorage.getItem('username');
-    const callsign = localStorage.getItem('callsign');
+// Fetch available controllers
+socket.emit('requestControllers');
 
-    document.getElementById('user-info').textContent = `Logged in as: ${username} (${callsign})`;
-    
-    // Load available controllers
-    socket.emit('requestControllers'); // Request the list of controllers
-});
-
-// Update available controllers list
+// Populate the controller list
 socket.on('updateControllers', (controllers) => {
-    const availableControllers = document.getElementById('available-controllers');
-    availableControllers.innerHTML = ''; // Clear existing list
+    const controllerBoxes = document.getElementById('controller-boxes');
+    controllerBoxes.innerHTML = ''; // Clear existing list
 
     controllers.forEach(controller => {
         const controllerBox = document.createElement('div');
-        controllerBox.textContent = `${controller.username} (${controller.position})`;
+        controllerBox.classList.add('user-box');
+        controllerBox.setAttribute('data-id', controller.id);
+        controllerBox.textContent = `${controller.callsign} - ${controller.position}`;
+
         controllerBox.addEventListener('click', () => {
+            // Remove 'selected' styling from other boxes
+            document.querySelectorAll('.user-box').forEach(box => box.classList.remove('selected-user'));
+            // Apply 'selected' styling to the clicked box
+            controllerBox.classList.add('selected-user');
             selectedControllerId = controller.id; // Store selected controller ID
         });
-        availableControllers.appendChild(controllerBox);
+
+        controllerBoxes.appendChild(controllerBox);
     });
 });
 
-// Handle sending messages
-document.getElementById('send-message').addEventListener('click', () => {
-    const message = document.getElementById('message-input').value.trim();
-    if (message) {
+// Handle button clicks to create messages
+document.getElementById('request-ifr-clearance').addEventListener('click', () => {
+    const destination = prompt("Enter the destination airport:");
+    if (selectedControllerId && destination) {
+        const message = `${selectedControllerId}, ${localStorage.getItem('callsign')}, request IFR clearance to ${destination}`;
+        document.getElementById('message-output').textContent = message; // Display message
         socket.emit('privateMessage', { recipientId: selectedControllerId, message });
-        document.getElementById('message-input').value = ''; // Clear input
     } else {
-        alert('Type a message before sending.');
+        alert("Please select a controller and enter a destination.");
     }
 });
 
-// Handle premade message button clicks
-document.querySelectorAll('.premade-button').forEach(button => {
-    button.addEventListener('click', () => {
-        const action = button.dataset.message;
-        let premadeMessage = '';
+document.getElementById('request-taxi').addEventListener('click', () => {
+    if (selectedControllerId) {
+        const message = `${selectedControllerId}, ${localStorage.getItem('callsign')}, request taxi.`;
+        document.getElementById('message-output').textContent = message; // Display message
+        socket.emit('privateMessage', { recipientId: selectedControllerId, message });
+    } else {
+        alert("Please select a controller.");
+    }
+});
 
-        if (selectedControllerId) {
-            const destination = prompt("Enter destination airport:") || 'destination';
-            const flightLevel = prompt("Enter flight level or altitude:") || 'FL';
-
-            switch (action) {
-                case "Request IFR Clearance":
-                    premadeMessage = `${document.getElementById('user-info').textContent.split(' ')[2]}, ${callsign}, request clearance to ${destination}`;
-                    break;
-                case "Request Taxi":
-                    premadeMessage = `${document.getElementById('user-info').textContent.split(' ')[2]}, ${callsign}, request taxi`;
-                    break;
-                case "Request FL Change":
-                    const climbOrDescend = prompt("Choose: climb or descend") || 'climb';
-                    premadeMessage = `${document.getElementById('user-info').textContent.split(' ')[2]}, ${callsign}, request ${climbOrDescend} to ${flightLevel}`;
-                    break;
-            }
-
-            if (premadeMessage) {
-                document.getElementById('message-input').value = premadeMessage; // Set message input to premade message
-            }
-        } else {
-            alert("Select a controller before sending a message.");
-        }
-    });
+document.getElementById('request-fl-change').addEventListener('click', () => {
+    const direction = prompt("Enter climb or descend:");
+    const altitude = prompt("Enter flight level or altitude:");
+    if (selectedControllerId && direction && altitude) {
+        const message = `${selectedControllerId}, ${localStorage.getItem('callsign')}, request ${direction} to ${altitude}`;
+        document.getElementById('message-output').textContent = message; // Display message
+        socket.emit('privateMessage', { recipientId: selectedControllerId, message });
+    } else {
+        alert("Please select a controller and enter climb/descend and altitude.");
+    }
 });

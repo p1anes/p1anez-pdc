@@ -4,30 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controller Interface</title>
-    <link rel="stylesheet" href="styling.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>Controller Interface</h1>
-        <div id="user-info"></div>
-        <div id="available-pilots">
+        <div id="user-info"></div> <!-- Display logged-in user info -->
+    </header>
+    
+    <div class="container">
+        <div id="available-users" class="available-users">
             <h2>Available Pilots</h2>
-            <!-- Pilots will be populated here -->
+            <div id="pilot-boxes"></div> <!-- User boxes will be populated here -->
         </div>
-        <div id="message-log">
-            <h2>Message Log</h2>
-            <!-- Messages will be logged here -->
+
+        <div class="message-input">
+            <button id="if-clearance">IFR Clearance</button>
+            <button id="fl-change">FL Change</button>
+            <button id="vector">Vector</button>
         </div>
-        <input type="text" id="message-input" placeholder="Type your message here..." />
-        <button id="send-message">Send</button>
-        
-        <div class="premade-messages">
-            <h3>Premade Messages</h3>
-            <button class="premade-button" data-message="IFR Clearance">IFR Clearance</button>
-            <button class="premade-button" data-message="FL Change">FL Change</button>
-            <button class="premade-button" data-message="Vector">Vector</button>
+
+        <div id="message-display">
+            <h2>Messages</h2>
+            <div id="message-output"></div> <!-- Display messages here -->
         </div>
     </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="controller.js"></script>
 </body>
