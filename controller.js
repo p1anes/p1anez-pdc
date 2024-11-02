@@ -6,6 +6,20 @@ socket.emit('registerUser', {
     position: 'controller'
 });
 
+document.getElementById('send-message-button').addEventListener('click', () => {
+    const message = document.getElementById('free-text-message').value;
+    if (!selectedPilotId || !message) {
+        alert("Please select a pilot and fill in the message.");
+        return;
+    }
+    // Send the message
+    socket.emit('privateMessage', {
+        recipientId: selectedPilotId,
+        message: `${document.getElementById('callsign').value}, ${message}`
+    });
+    document.getElementById('free-text-message').value = ''; // Clear the text area
+});
+
 // Fetch available pilots
 socket.emit('requestPilots');
 
