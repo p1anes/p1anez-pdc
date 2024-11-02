@@ -38,22 +38,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Create user data object
-        const userData = { username, role: roleSelect.value, callsign, position };
-
-        // Emit login data to the server
-        socket.emit('userLoggedIn', userData);
-
-        // Store user info in localStorage for the messaging page
+        // Store user info in localStorage for the respective pages
         localStorage.setItem('username', username);
         localStorage.setItem('userRole', roleSelect.value);
         if (roleSelect.value === 'pilot') {
             localStorage.setItem('callsign', callsign);
+            window.location.href = 'pilot.html'; // Redirect to pilot page
         } else {
             localStorage.setItem('position', position);
+            window.location.href = 'controller.html'; // Redirect to controller page
         }
-
-        // Redirect to messaging page
-        window.location.href = 'messaging.html';
     });
 });

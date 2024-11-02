@@ -21,11 +21,11 @@
             </div>
 
             <div class="input-group">
-                <input type="text" id="username" placeholder="Enter Username" class="rounded-input">
+                <input type="text" id="username" placeholder="Enter Username" class="rounded-input" required>
             </div>
 
             <div class="input-group">
-                <input type="text" id="callsign" placeholder="Enter Callsign" class="rounded-input"> <!-- Callsign input for pilots -->
+                <input type="text" id="callsign" placeholder="Enter Callsign" class="rounded-input" style="display: inline-block;">
                 <select id="extraInfo" class="rounded-input" style="display: none;"> <!-- Dropdown for controllers -->
                     <option value="">Select Position</option>
                     <option value="IRFD_GND">IRFD_GND</option>
@@ -59,11 +59,6 @@
             <button type="submit" class="rounded-button">Login</button>
             <p id="error-message" class="error-message"></p> <!-- Error message -->
         </form>
-
-        <div id="controllers">
-            <h2>Available Controllers</h2>
-            <ul id="availableControllers"></ul>
-        </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>

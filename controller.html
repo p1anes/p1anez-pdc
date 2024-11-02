@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controller Interface</title>
+    <link rel="stylesheet" href="styling.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Controller Interface</h1>
+        <div id="user-info"></div>
+        <div id="available-pilots">
+            <h2>Available Pilots</h2>
+            <!-- Pilots will be populated here -->
+        </div>
+        <div id="message-log">
+            <h2>Message Log</h2>
+            <!-- Messages will be logged here -->
+        </div>
+        <input type="text" id="message-input" placeholder="Type your message here..." />
+        <button id="send-message">Send</button>
+        
+        <div class="premade-messages">
+            <h3>Premade Messages</h3>
+            <button class="premade-button" data-message="IFR Clearance">IFR Clearance</button>
+            <button class="premade-button" data-message="FL Change">FL Change</button>
+            <button class="premade-button" data-message="Vector">Vector</button>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="controller.js"></script>
+</body>
+</html>
