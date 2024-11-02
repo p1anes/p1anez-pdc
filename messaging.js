@@ -48,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('send-message').addEventListener('click', () => {
         const message = document.getElementById('message-input').value.trim();
         if (message && selectedUserId) {
-            socket.emit('privateMessage', { recipientId: selectedUserId, message });
+            // Emit the message to the server with the correct event name
+            socket.emit('sendMessage', { to: selectedUserId, message });
             document.getElementById('message-input').value = ''; // Clear input
         } else {
             alert('Select a user to message and type a message');
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const senderInfo = document.createElement('div');
         senderInfo.classList.add('sender-info');
-        senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`; // Ensure it matches the server response
+        senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`;
 
         const messageContent = document.createElement('p');
         messageContent.textContent = data.message;
