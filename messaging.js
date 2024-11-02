@@ -47,7 +47,7 @@ socket.on('updateUserList', (users) => {
 document.getElementById('send-message').addEventListener('click', () => {
     const message = document.getElementById('message-input').value.trim();
     if (message && selectedUserId) {
-        socket.emit('sendMessage', { to: selectedUserId, message });
+        socket.emit('privateMessage', { recipientId: selectedUserId, message });
         document.getElementById('message-input').value = ''; // Clear input
     } else {
         alert('Select a user to message and type a message');
@@ -57,12 +57,17 @@ document.getElementById('send-message').addEventListener('click', () => {
 // Display received messages with sender info
 socket.on('receiveMessage', (data) => {
     const receivedMessages = document.getElementById('received-messages'); // Corrected ID here
+    if (!receivedMessages) {
+        console.error("Received messages container not found");
+        return; // Early return if the element is not found
+    }
+
     const messageBox = document.createElement('div');
     messageBox.classList.add('message-box');
 
     const senderInfo = document.createElement('div');
     senderInfo.classList.add('sender-info');
-    senderInfo.textContent = `From: ${data.fromUser} (${data.fromRole})`;
+    senderInfo.textContent = `From: ${data.from} (${data.role})`;
 
     const messageContent = document.createElement('p');
     messageContent.textContent = data.message;
