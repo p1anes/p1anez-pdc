@@ -1,86 +1,104 @@
 const socket = io();
 let selectedPilotId = null;
 
+// Register the controller upon connecting
 socket.emit('registerUser', {
-    callsign: localStorage.getItem('callsign'), 
+    callsign: localStorage.getItem('callsign'),
     position: 'controller'
 });
 
+// Populate the pilot list
+socket.on('updatePilots', (pilots) => {
+    const pilotList = document.getElementById('pilot-list');
+    pilotList.innerHTML = '';
+    pilots.forEach((pilot) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = pilot.callsign;
+        listItem.classList.add('selectable-user');
+        listItem.addEventListener('click', () => {
+            selectedPilotId = pilot.id; // Set the selected pilot's ID
+            highlightSelectedUser(listItem);
+        });
+        pilotList.appendChild(listItem);
+    });
+});
+
+// Highlight selected user
+function highlightSelectedUser(element) {
+    document.querySelectorAll('.selectable-user').forEach(item => item.classList.remove('selected'));
+    element.classList.add('selected');
+}
+
+// IFR Clearance button
+document.getElementById('ifr-clearance').addEventListener('click', () => {
+    const destination = prompt("Enter destination airport:");
+    const departureProcedure = prompt("Enter departure procedure:");
+    const initialAltitude = prompt("Enter initial altitude:");
+    const squawkCode = Math.floor(1000 + Math.random() * 7999); // Generate a 4-digit squawk code without 8 and 9
+    if (!selectedPilotId || !destination.trim() || !departureProcedure.trim() || !initialAltitude.trim()) {
+        alert("Please select a pilot and fill in all fields.");
+        return;
+    }
+    const message = `${localStorage.getItem('callsign')}, cleared to ${destination} via ${departureProcedure}, maintain ${initialAltitude}FT, squawk ${squawkCode}`;
+    socket.emit('privateMessage', {
+        recipientId: selectedPilotId,
+        message: message
+    });
+});
+
+// Flight Level Change button
+document.getElementById('fl-change').addEventListener('click', () => {
+    const climbOrDescend = prompt("Enter 'climb' or 'descend':");
+    const flightLevel = prompt("Enter desired flight level or altitude:");
+    if (!selectedPilotId || !climbOrDescend.trim() || !flightLevel.trim()) {
+        alert("Please select a pilot and fill in all fields.");
+        return;
+    }
+    const message = `${localStorage.getItem('callsign')}, ${climbOrDescend} to ${flightLevel}`;
+    socket.emit('privateMessage', {
+        recipientId: selectedPilotId,
+        message: message
+    });
+});
+
+// Vector button
+document.getElementById('vector').addEventListener('click', () => {
+    const direction = prompt("Enter 'left' or 'right':");
+    const heading = prompt("Enter heading in degrees:");
+    if (!selectedPilotId || !direction.trim() || !heading.trim()) {
+        alert("Please select a pilot and fill in all fields.");
+        return;
+    }
+    const message = `${localStorage.getItem('callsign')}, turn ${direction} heading ${heading} degrees`;
+    socket.emit('privateMessage', {
+        recipientId: selectedPilotId,
+        message: message
+    });
+});
+
+// Free Text Message
 document.getElementById('send-message-button').addEventListener('click', () => {
     const message = document.getElementById('free-text-message').value;
-    if (!selectedPilotId || !message) {
+    if (!selectedPilotId || !message.trim()) {
         alert("Please select a pilot and fill in the message.");
         return;
     }
-    // Send the message
     socket.emit('privateMessage', {
         recipientId: selectedPilotId,
-        message: `${document.getElementById('callsign').value}, ${message}`
+        message: `${localStorage.getItem('callsign')}, ${message}`
     });
     document.getElementById('free-text-message').value = ''; // Clear the text area
 });
 
-// Fetch available pilots
-socket.emit('requestPilots');
-
-// Populate the pilot list
-socket.on('updatePilots', (pilots) => {
-    const pilotBoxes = document.getElementById('pilot-boxes');
-    pilotBoxes.innerHTML = ''; // Clear existing list
-
-    pilots.forEach(pilot => {
-        const pilotBox = document.createElement('div');
-        pilotBox.classList.add('user-box');
-        pilotBox.setAttribute('data-id', pilot.id);
-        pilotBox.textContent = `${pilot.callsign} - ${pilot.username}`;
-
-        pilotBox.addEventListener('click', () => {
-            // Remove 'selected' styling from other boxes
-            document.querySelectorAll('.user-box').forEach(box => box.classList.remove('selected-user'));
-            // Apply 'selected' styling to the clicked box
-            pilotBox.classList.add('selected-user');
-            selectedPilotId = pilot.id; // Store selected pilot ID
-        });
-
-        pilotBoxes.appendChild(pilotBox);
-    });
+// Display incoming private messages
+socket.on('privateMessage', ({ message, from }) => {
+    displayMessage(from, message);
 });
 
-// Handle button clicks to create messages
-document.getElementById('if-clearance').addEventListener('click', () => {
-    const destination = prompt("Enter the destination:");
-    const procedure = prompt("Enter the departure procedure:");
-    const initialAltitude = prompt("Enter initial altitude:");
-    const squawk = Math.floor(Math.random() * 10000).toString().padStart(4, '0').replace(/[89]/g, '0'); // Generate 4 digit squawk code
-    if (selectedPilotId && destination && procedure && initialAltitude) {
-        const message = `${selectedPilotId}, ${localStorage.getItem('position')}, hello! Cleared to ${destination} via ${procedure}, maintain initial ${initialAltitude}FT, squawk ${squawk}`;
-        document.getElementById('message-output').textContent = message; // Display message
-        socket.emit('privateMessage', { recipientId: selectedPilotId, message });
-    } else {
-        alert("Please select a pilot and fill all fields.");
-    }
-});
-
-document.getElementById('fl-change').addEventListener('click', () => {
-    const direction = prompt("Enter climb or descend:");
-    const altitude = prompt("Enter flight level or altitude:");
-    if (selectedPilotId && direction && altitude) {
-        const message = `${selectedPilotId}, ${direction} to ${altitude}.`;
-        document.getElementById('message-output').textContent = message; // Display message
-        socket.emit('privateMessage', { recipientId: selectedPilotId, message });
-    } else {
-        alert("Please select a pilot and enter climb/descend and altitude.");
-    }
-});
-
-document.getElementById('vector').addEventListener('click', () => {
-    const turn = prompt("Enter Left or Right:");
-    const heading = prompt("Enter heading in degrees:");
-    if (selectedPilotId && turn && heading) {
-        const message = `${selectedPilotId} turn ${turn} heading ${heading}° degrees.`;
-        document.getElementById('message-output').textContent = message; // Display message
-        socket.emit('privateMessage', { recipientId: selectedPilotId, message });
-    } else {
-        alert("Please select a pilot and enter turn and heading.");
-    }
-});
+function displayMessage(from, message) {
+    const messagesContainer = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${from}: ${message}`;
+    messageElement.classList.add('message');
+    messagesContainer.appendChild(messageElement);
+}

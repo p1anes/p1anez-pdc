@@ -1,81 +1,99 @@
 const socket = io();
 let selectedControllerId = null;
 
-socket.emit('registerUser' , {
+// Register the pilot upon connecting
+socket.emit('registerUser', {
     callsign: localStorage.getItem('callsign'),
     position: 'pilot'
 });
 
+// Populate the controller list
+socket.on('updateControllers', (controllers) => {
+    const controllerList = document.getElementById('controller-list');
+    controllerList.innerHTML = '';
+    controllers.forEach((controller) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = controller.callsign;
+        listItem.classList.add('selectable-user');
+        listItem.addEventListener('click', () => {
+            selectedControllerId = controller.id; // Set the selected controller's ID
+            highlightSelectedUser(listItem);
+        });
+        controllerList.appendChild(listItem);
+    });
+});
+
+// Highlight selected user
+function highlightSelectedUser(element) {
+    document.querySelectorAll('.selectable-user').forEach(item => item.classList.remove('selected'));
+    element.classList.add('selected');
+}
+
+// Request IFR Clearance button
+document.getElementById('request-ifr-clearance').addEventListener('click', () => {
+    const destination = prompt("Enter destination airport:");
+    if (!selectedControllerId || !destination.trim()) {
+        alert("Please select a controller and fill in all fields.");
+        return;
+    }
+    const message = `${localStorage.getItem('callsign')}, request clearance to ${destination}`;
+    socket.emit('privateMessage', {
+        recipientId: selectedControllerId,
+        message: message
+    });
+});
+
+// Request Taxi button
+document.getElementById('request-taxi').addEventListener('click', () => {
+    if (!selectedControllerId) {
+        alert("Please select a controller.");
+        return;
+    }
+    const message = `${localStorage.getItem('callsign')}, request taxi`;
+    socket.emit('privateMessage', {
+        recipientId: selectedControllerId,
+        message: message
+    });
+});
+
+// Request Flight Level Change button
+document.getElementById('request-fl-change').addEventListener('click', () => {
+    const climbOrDescend = prompt("Enter 'climb' or 'descend':");
+    const flightLevel = prompt("Enter desired flight level or altitude:");
+    if (!selectedControllerId || !climbOrDescend.trim() || !flightLevel.trim()) {
+        alert("Please select a controller and fill in all fields.");
+        return;
+    }
+    const message = `${localStorage.getItem('callsign')}, request ${climbOrDescend} to ${flightLevel}`;
+    socket.emit('privateMessage', {
+        recipientId: selectedControllerId,
+        message: message
+    });
+});
+
+// Free Text Message
 document.getElementById('send-message-button').addEventListener('click', () => {
     const message = document.getElementById('free-text-message').value;
-    if (!selectedControllerId || !message) {
+    if (!selectedControllerId || !message.trim()) {
         alert("Please select a controller and fill in the message.");
         return;
     }
-    // Send the message
     socket.emit('privateMessage', {
         recipientId: selectedControllerId,
-        message: `${document.getElementById('callsign').value}, ${message}`
+        message: `${localStorage.getItem('callsign')}, ${message}`
     });
     document.getElementById('free-text-message').value = ''; // Clear the text area
 });
 
-// Fetch available controllers
-socket.emit('requestControllers');
-
-// Populate the controller list
-socket.on('updateControllers', (controllers) => {
-    const controllerBoxes = document.getElementById('controller-boxes');
-    controllerBoxes.innerHTML = ''; // Clear existing list
-
-    controllers.forEach(controller => {
-        const controllerBox = document.createElement('div');
-        controllerBox.classList.add('user-box');
-        controllerBox.setAttribute('data-id', controller.id);
-        controllerBox.textContent = `${controller.callsign} - ${controller.position}`;
-
-        controllerBox.addEventListener('click', () => {
-            // Remove 'selected' styling from other boxes
-            document.querySelectorAll('.user-box').forEach(box => box.classList.remove('selected-user'));
-            // Apply 'selected' styling to the clicked box
-            controllerBox.classList.add('selected-user');
-            selectedControllerId = controller.id; // Store selected controller ID
-        });
-
-        controllerBoxes.appendChild(controllerBox);
-    });
+// Display incoming private messages
+socket.on('privateMessage', ({ message, from }) => {
+    displayMessage(from, message);
 });
 
-// Handle button clicks to create messages
-document.getElementById('request-ifr-clearance').addEventListener('click', () => {
-    const destination = prompt("Enter the destination airport:");
-    if (selectedControllerId && destination) {
-        const message = `${selectedControllerId}, ${localStorage.getItem('callsign')}, request IFR clearance to ${destination}`;
-        document.getElementById('message-output').textContent = message; // Display message
-        socket.emit('privateMessage', { recipientId: selectedControllerId, message });
-    } else {
-        alert("Please select a controller and enter a destination.");
-    }
-});
-
-document.getElementById('request-taxi').addEventListener('click', () => {
-    if (selectedControllerId) {
-        const message = `${selectedControllerId}, ${localStorage.getItem('callsign')}, request taxi.`;
-        document.getElementById('message-output').textContent = message; // Display message
-        socket.emit('privateMessage', { recipientId: selectedControllerId, message });
-    } else {
-        alert("Please select a controller.");
-    }
-});
-
-document.getElementById('request-fl-change').addEventListener('click', () => {
-    const direction = prompt("Enter climb or descend:");
-    const altitude = prompt("Enter flight level or altitude:");
-    if (selectedControllerId && direction && altitude) {
-        const message = `${selectedControllerId}, ${localStorage.getItem('callsign')}, request ${direction} to ${altitude}`;
-        document.getElementById('message-output').textContent = message; // Display message
-        socket.emit('privateMessage', { recipientId: selectedControllerId, message });
-    } else {
-        alert("Please select a controller and enter climb/descend and altitude.");
-    }
-});
+function displayMessage(from, message) {
+    const messagesContainer = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${from}: ${message}`;
+    messageElement.classList.add('message');
+    messagesContainer.appendChild(messageElement);
+}
