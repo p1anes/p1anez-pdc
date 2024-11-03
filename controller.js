@@ -9,14 +9,14 @@ socket.emit('registerUser', {
 
 // Populate the pilot list
 socket.on('updatePilots', (pilots) => {
-    const pilotList = document.getElementById('pilot-list');
-    pilotList.innerHTML = '';
+    const pilotList = document.getElementById('user-boxes'); // Updated to use user-boxes
+    pilotList.innerHTML = ''; // Clear the list before adding new entries
     pilots.forEach((pilot) => {
-        const listItem = document.createElement('li');
+        const listItem = document.createElement('div');
         listItem.textContent = pilot.callsign;
         listItem.classList.add('selectable-user');
         listItem.addEventListener('click', () => {
-            selectedPilotId = pilot.id; // Set the selected pilot's ID
+            selectedPilotId = pilot.id;
             highlightSelectedUser(listItem);
         });
         pilotList.appendChild(listItem);
@@ -30,7 +30,7 @@ function highlightSelectedUser(element) {
 }
 
 // IFR Clearance button
-document.getElementById('ifr-clearance').addEventListener('click', () => {
+document.getElementById('if-clearance').addEventListener('click', () => {
     const destination = prompt("Enter destination airport:");
     const departureProcedure = prompt("Enter departure procedure:");
     const initialAltitude = prompt("Enter initial altitude:");
@@ -96,7 +96,7 @@ socket.on('privateMessage', ({ message, from }) => {
 });
 
 function displayMessage(from, message) {
-    const messagesContainer = document.getElementById('messages');
+    const messagesContainer = document.getElementById('message-output');
     const messageElement = document.createElement('div');
     messageElement.textContent = `${from}: ${message}`;
     messageElement.classList.add('message');

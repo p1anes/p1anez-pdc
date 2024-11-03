@@ -9,14 +9,14 @@ socket.emit('registerUser', {
 
 // Populate the controller list
 socket.on('updateControllers', (controllers) => {
-    const controllerList = document.getElementById('controller-list');
-    controllerList.innerHTML = '';
+    const controllerList = document.getElementById('user-boxes'); // Updated to use user-boxes
+    controllerList.innerHTML = ''; // Clear the list before adding new entries
     controllers.forEach((controller) => {
-        const listItem = document.createElement('li');
+        const listItem = document.createElement('div');
         listItem.textContent = controller.callsign;
         listItem.classList.add('selectable-user');
         listItem.addEventListener('click', () => {
-            selectedControllerId = controller.id; // Set the selected controller's ID
+            selectedControllerId = controller.id;
             highlightSelectedUser(listItem);
         });
         controllerList.appendChild(listItem);
@@ -91,7 +91,7 @@ socket.on('privateMessage', ({ message, from }) => {
 });
 
 function displayMessage(from, message) {
-    const messagesContainer = document.getElementById('messages');
+    const messagesContainer = document.getElementById('message-output');
     const messageElement = document.createElement('div');
     messageElement.textContent = `${from}: ${message}`;
     messageElement.classList.add('message');
