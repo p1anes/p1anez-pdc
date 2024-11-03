@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const callsignInput = document.getElementById('callsign');
     const extraInfoInput = document.getElementById('extraInfo');
 
+    // Show/hide input fields based on selected role
     roleSelect.addEventListener('change', (event) => {
         const selectedRole = event.target.value;
         callsignInput.style.display = selectedRole === 'pilot' ? 'inline-block' : 'none';
@@ -41,11 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // Store user info in localStorage for the respective pages
         localStorage.setItem('username', username);
         localStorage.setItem('userRole', roleSelect.value);
+
         if (roleSelect.value === 'pilot') {
-            localStorage.setItem('callsign', callsign);
+            localStorage.setItem('callsign', callsign); // Store the callsign
             window.location.href = 'pilot.html'; // Redirect to pilot page
         } else {
-            localStorage.setItem('position', position);
+            localStorage.setItem('position', position); // Store the position for controller
             window.location.href = 'controller.html'; // Redirect to controller page
         }
     });

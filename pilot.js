@@ -1,6 +1,5 @@
 const socket = io();
 let selectedControllerId = null;
-const controllerList = document.getElementById('controller-list');
 
 // Register the pilot upon connecting
 socket.emit('registerUser', {
@@ -8,17 +7,20 @@ socket.emit('registerUser', {
     position: 'pilot'
 });
 
+// Populate the controller list
 socket.on('updateControllers', (controllers) => {
-    controllerList.innerHTML = ''; // Clear the list before adding new entries
+    const controllerBoxes = document.getElementById('controller-boxes');
+    controllerBoxes.innerHTML = ''; // Clear the list before adding new entries
+
     controllers.forEach((controller) => {
-        const listItem = document.createElement('li');
+        const listItem = document.createElement('div');
         listItem.textContent = controller.callsign;
         listItem.classList.add('selectable-user');
         listItem.addEventListener('click', () => {
             selectedControllerId = controller.id;
             highlightSelectedUser(listItem);
         });
-        controllerList.appendChild(listItem);
+        controllerBoxes.appendChild(listItem);
     });
 });
 

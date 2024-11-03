@@ -144,3 +144,23 @@ button:hover {
 .free-text button:hover {
     background-color: #45a049; /* Darker shade on hover */
 }
+
+/* Style the user list items */
+.selectable-user {
+    cursor: pointer;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    list-style: none; /* Remove bullets */
+}
+
+.selectable-user:hover {
+    background-color: #f0f0f0;
+}
+
+.selected {
+    background-color: #cce5ff; /* Different color for selected item */
+    border-color: #007bff;
+    font-weight: bold;
+}
